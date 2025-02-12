@@ -23,6 +23,13 @@ DerivedCombinator     ::= [a-zA-Z][a-zA-Z0-9]* - ("S" | "K")
 
 ```
 
+## Example Program
+
+```
+I = S K K;
+K I I
+```
+
 ## Example Combinators
 
 The identity function (extremely useful):

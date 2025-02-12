@@ -1,1 +1,1 @@
-clj -M ./src/parser.clj $1
+clj -M ./src/interpreter.clj $1

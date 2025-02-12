@@ -1,1 +1,2 @@
-let I = S(K K) in I(K)
+I = S(K K);
+I(K)

@@ -31,7 +31,7 @@
         (do
           (println "Parsed expression: " (pretty-print (:result parsed)))
           (println "Evaluated result: " (pretty-print (evaluate (:result parsed)))))
-        (println "Parsing failed:" (:error parsed))))))
+        (println "Parsing failed:" (:error parsed) (:remaining parsed))))))
 
 (run)
 

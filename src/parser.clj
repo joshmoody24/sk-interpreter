@@ -3,10 +3,10 @@
 
 ;; --- Tokenization Phase ---
 
-(def reserved-tokens #{"let" "in" "S" "K" "(" ")" "="})
+(def reserved-tokens #{"let" "in" "S" "K" "(" ")" "=" ";"})
 
 (defn tokenize [input]
-  (->> (re-seq #"[A-Za-z0-9]+|[\(\)=]" input)
+  (->> (re-seq #"[A-Za-z0-9]+|[\(\);=]" input)
        (map (fn [tok]
               {:type (if (contains? reserved-tokens tok)
                        :keyword
@@ -50,7 +50,7 @@
 ;; --- Language Parsers ---
 
 ;; avoid mutual recursion warning
-(declare expression-p)
+(declare application-p)
 
 (defn sk-combinator-p [tokens]
   (when (seq tokens)
@@ -71,7 +71,7 @@
   ;; unwrap the parenthetical expression by returning just the inner result.
   (when-let [[[_ expr _] rest-tokens]
              ((seq-p (match-token-p "(")
-                     expression-p
+                     application-p
                      (match-token-p ")")) tokens)]
     [expr rest-tokens]))
 
@@ -84,22 +84,24 @@
       [{:type :application, :expressions atoms} remaining]
       [(first atoms) remaining])))
 
-(defn let-expression-p [tokens]
-  (when-let [[[_ placeholder _ value _ body] rest-tokens]
-             ((seq-p (match-token-p "let")
-                     placeholder-p
-                     (match-token-p "=")
-                     expression-p
-                     (match-token-p "in")
-                     expression-p) tokens)]
-    [{:type :let
+(defn definition-expression-p [tokens]
+  (when-let [[[placeholder _ expr _] rest-tokens]
+             ((seq-p
+               placeholder-p
+               (match-token-p "=")
+               application-p
+               (match-token-p ";")) tokens)]
+    [{:type :definition
       :placeholder placeholder
-      :value value
-      :body body}
+      :value expr}
      rest-tokens]))
 
-(defn expression-p [tokens]
-  ((choice-p let-expression-p application-p) tokens))
+(defn program-p [tokens]
+  (when-let [[[defs expr] rest-tokens]
+             ((seq-p (many-p definition-expression-p) application-p) tokens)]
+    [{:definitions defs
+      :expression  expr}
+     rest-tokens]))
 
 ;; --- Running the Parser ---
 
@@ -107,8 +109,9 @@
   (let [tokens (tokenize input)]
     (if (empty? tokens)
       {:success false, :error "Unconsumed input", :result nil, :remaining []}
-      (let [[result remaining] (expression-p tokens)]
+      (if-let [[result remaining] (program-p tokens)]
         (if (seq remaining)
           {:success false, :error "Unconsumed input", :result result, :remaining remaining}
-          {:success true, :result, result})))))
+          {:success true, :result result})
+        {:success false, :error "Parsing failed", :result nil}))))
 

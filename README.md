@@ -5,17 +5,17 @@ This is a simple interpreter for the simplest possible general-purpose programmi
 ## Syntax
 
 ```
-Program         ::= Expression
+Program         ::= DefinitionStatements Expression
 
-Expression      ::= Application | AtomicExpression | LetExpression
+DefinitionStatements ::== DefinitionStatement DefinitionStatements
+
+DefinitionStatement ::= Placeholder "=" Expression ";"
 
 Application     ::= Application AtomicExpression | AtomicExpression
 
 AtomicExpression ::= Combinator
                    | Placeholder
                    | "(" Expression ")"
-
-LetExpression   ::= "let" Placeholder "=" Expression "in" Expression
 
 Combinator      ::= "S" | "K"
 

@@ -29,7 +29,8 @@
           parsed (parser/parse input)]
       (if (:success parsed)
         (do
-          (println "Parsed expression: " (pretty-print (:result parsed)))
+          (println "Parsed definitions: " (pretty-print (get-in parsed [:result :definitions])))
+          (println "Parsed expression: " (pretty-print (get-in parsed [:result :expression])))
           (println "Evaluated result: " (pretty-print (evaluate (:result parsed)))))
         (println "Parsing failed:" (:error parsed) (:remaining parsed))))))
 

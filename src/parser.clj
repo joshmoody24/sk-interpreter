@@ -52,7 +52,7 @@
 ;; avoid mutual recursion warning
 (declare application-p)
 
-(defn sk-combinator-p [tokens]
+(defn base-combinator-p [tokens]
   (when (seq tokens)
     (let [token (first tokens)]
       (if (and (= (:type token) :keyword)
@@ -60,12 +60,15 @@
         [{:type :combinator, :value (:value token)} (rest tokens)]
         nil))))
 
-(defn placeholder-p [tokens]
+(defn derived-combinator-p [tokens]
   (when (seq tokens)
     (let [token (first tokens)]
       (if (= (:type token) :identifier)
         [{:type :placeholder, :name (:value token)} (rest tokens)]
         nil))))
+
+(defn combinator-p [tokens]
+  ((choice-p base-combinator-p derived-combinator-p) tokens))
 
 (defn parenthetical-p [tokens]
   ;; unwrap the parenthetical expression by returning just the inner result.
@@ -76,7 +79,7 @@
     [expr rest-tokens]))
 
 (defn atomic-expression-p [tokens]
-  ((choice-p sk-combinator-p placeholder-p parenthetical-p) tokens))
+  ((choice-p combinator-p parenthetical-p) tokens))
 
 (defn application-p [tokens]
   (let [[atoms remaining] ((many-p atomic-expression-p) tokens)]
@@ -87,7 +90,7 @@
 (defn definition-expression-p [tokens]
   (when-let [[[placeholder _ expr _] rest-tokens]
              ((seq-p
-               placeholder-p
+               derived-combinator-p
                (match-token-p "=")
                application-p
                (match-token-p ";")) tokens)]

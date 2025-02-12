@@ -5,27 +5,27 @@ This is a simple interpreter for the simplest possible general-purpose programmi
 ## Syntax
 
 ```
-Program         ::= DefinitionStatements Expression
+Program               ::= DefinitionStatements Expression
 
-DefinitionStatements ::== DefinitionStatement DefinitionStatements
+DefinitionStatements  ::== DefinitionStatement DefinitionStatements
 
-DefinitionStatement ::= Placeholder "=" Expression ";"
+DefinitionStatement   ::= DerivedCombinator "=" Expression ";"
 
-Application     ::= Application AtomicExpression | AtomicExpression
+Application           ::= Application AtomicExpression | AtomicExpression
 
-AtomicExpression ::= Combinator
-                   | Placeholder
-                   | "(" Expression ")"
+AtomicExpression      ::= Combinator | "(" Expression ")"
 
-Combinator      ::= "S" | "K"
+Combinator            ::= BaseCombinator | DerivedCombinator
 
-Placeholder     ::= [a-zA-Z][a-zA-Z0-9]* - ("S" | "K")
+BaseCombinator        ::= "S" | "K"
+
+DerivedCombinator     ::= [a-zA-Z][a-zA-Z0-9]* - ("S" | "K")
 
 ```
 
-## Examples
+## Example Combinators
 
-This defines the identity function, which is extremely useful:
+The identity function (extremely useful):
 
 ```
 I = S K K;
@@ -46,5 +46,5 @@ FALSE = K I;
 | **C**      | Cardinal    | `S (B B S) (K K)` |
 | **W**      | Warbler     | `S I I`           |
 | **T**      | Thrush      | `C I`             |
-| **J**      | Jay         | `S B B`           |
+| **J**      | Jaybird     | `S B B`           |
 | **M**      | Mockingbird | `S I I`           |

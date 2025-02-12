@@ -20,7 +20,6 @@ Combinator            ::= BaseCombinator | DerivedCombinator
 BaseCombinator        ::= "S" | "K"
 
 DerivedCombinator     ::= [a-zA-Z][a-zA-Z0-9]* - ("S" | "K")
-
 ```
 
 ## Example Program
@@ -55,3 +54,31 @@ FALSE = K I;
 | **T**      | Thrush      | `C I`             |
 | **J**      | Jaybird     | `S B B`           |
 | **M**      | Mockingbird | `S I I`           |
+
+## Planned Features
+
+### Type Hints
+
+```
+B x y z -> x (y z) = S (K S) K;
+```
+
+### Implementation Hints
+
+This is arguably cheating, but it's a useful feature nonetheless.
+
+```
+B x y z -> x (y z);
+```
+
+### Comments
+
+```
+# This is a comment
+```
+
+### Namespaced Imports
+
+```
+import foo.bar.baz as baz;
+```

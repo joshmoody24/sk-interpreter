@@ -1,7 +1,14 @@
 (ns parser
-  (:gen-class))
+  (:gen-class)
+  (:require
+   [clojure.string :as string]))
 
 ;; --- Tokenization Phase ---
+
+(defn without-comments [input]
+  (clojure.string/replace input #"#.*" ""))
+
+(without-comments "S K x; # comment\n")
 
 (def reserved-tokens #{"let" "in" "S" "K" "(" ")" "=" ";"})
 
@@ -109,7 +116,7 @@
 ;; --- Running the Parser ---
 
 (defn parse [input]
-  (let [tokens (tokenize input)]
+  (let [tokens (tokenize (without-comments input))]
     (if (empty? tokens)
       {:success false, :error "Unconsumed input", :result nil, :remaining []}
       (if-let [[result remaining] (program-p tokens)]

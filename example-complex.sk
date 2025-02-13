@@ -1,0 +1,24 @@
+I = S K K; # I x = x
+M = S I I;
+T = S(K(S I));
+B = S(K S)K;
+R = B B T;
+C = R R R;
+D = B B;
+E = B(B B B);
+F = E T T E T;
+V = B C T;
+Q = C B;
+Q1 = B C B;
+Q2 = B T;
+G = B B C;
+
+t = K;
+f = K I;
+
+zero = I;
+succ = V f;
+one = succ zero;
+two = succ one;
+
+two

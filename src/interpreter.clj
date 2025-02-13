@@ -16,8 +16,9 @@
          " in " (pretty-print (:body expr)) ")")
     :else (str expr)))
 
-(defn evaluate [expr]
-  (throw (Exception. "Not implemented")))
+(defn interpret-definition [expr]
+  
+
 
 ;; --- Main Execution ---
 

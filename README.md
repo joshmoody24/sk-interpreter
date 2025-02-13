@@ -5,15 +5,15 @@ This is a simple interpreter for the simplest possible general-purpose programmi
 ## Syntax
 
 ```
-Program               ::= DefinitionStatements Expression
+Program               ::= Definitions ApplicationExpression
 
-DefinitionStatements  ::== DefinitionStatement DefinitionStatements
+Definitions           ::== {Definition}
 
-DefinitionStatement   ::= DerivedCombinator "=" Expression ";"
+Definition            ::= DerivedCombinator "=" ApplicationExpression ";"
 
-Application           ::= Application AtomicExpression | AtomicExpression
+ApplicationExpression ::= PrimaryExpression {PrimaryExpression}
 
-AtomicExpression      ::= Combinator | "(" Expression ")"
+PrimaryExpression     ::= Combinator | "(" ApplicationExpression ")"
 
 Combinator            ::= BaseCombinator | DerivedCombinator
 

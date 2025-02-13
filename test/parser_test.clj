@@ -28,54 +28,54 @@
   (is (= (parse "S")
          {:success true,
           :result {:definitions []
-                   :expression {:type :combinator, :value "S"}}}))
+                   :expression {:type :combinator, :name "S"}}}))
 
   (is (= (parse "K")
          {:success true,
           :result {:definitions []
-                   :expression {:type :combinator, :value "K"}}}))
+                   :expression {:type :combinator, :name "K"}}}))
 
   (is (= (parse "x")
          {:success true,
           :result {:definitions []
-                   :expression {:type :placeholder, :name "x"}}}))
+                   :expression {:type :derived-combinator, :name "x"}}}))
 
   (is (= (parse "S K x")
          {:success true,
           :result {:definitions []
-                   :expression {:type :application,
-                                :expressions [{:type :combinator, :value "S"}
-                                              {:type :combinator, :value "K"}
-                                              {:type :placeholder, :name "x"}]}}}))
+                   :expression {:type :application-expression,
+                                :expressions [{:type :combinator, :name "S"}
+                                              {:type :combinator, :name "K"}
+                                              {:type :derived-combinator, :name "x"}]}}}))
 
   (is (= (parse "( S K ) x")
          {:success true,
           :result {:definitions []
-                   :expression {:type :application,
-                                :expressions [{:type :application,
-                                               :expressions [{:type :combinator, :value "S"}
-                                                             {:type :combinator, :value "K"}]}
-                                              {:type :placeholder, :name "x"}]}}}))
+                   :expression {:type :application-expression,
+                                :expressions [{:type :application-expression,
+                                               :expressions [{:type :combinator, :name "S"}
+                                                             {:type :combinator, :name "K"}]}
+                                              {:type :derived-combinator, :name "x"}]}}}))
 
   (is (= (parse "x = S; x K")
          {:success true,
           :result {:definitions [{:type :definition,
-                                  :placeholder {:type :placeholder, :name "x"},
-                                  :value {:type :combinator, :value "S"}}],
-                   :expression {:type :application,
-                                :expressions [{:type :placeholder, :name "x"}
-                                              {:type :combinator, :value "K"}]}}}))
+                                  :name "x",
+                                  :expression {:type :combinator, :name "S"}}],
+                   :expression {:type :application-expression,
+                                :expressions [{:type :derived-combinator, :name "x"}
+                                              {:type :combinator, :name "K"}]}}}))
 
   (is (= (parse "x = (S K); x x")
          {:success true,
           :result {:definitions [{:type :definition,
-                                  :placeholder {:type :placeholder, :name "x"},
-                                  :value {:type :application,
-                                          :expressions [{:type :combinator, :value "S"}
-                                                        {:type :combinator, :value "K"}]}}],
-                   :expression {:type :application,
-                                :expressions [{:type :placeholder, :name "x"}
-                                              {:type :placeholder, :name "x"}]}}}))
+                                  :name "x",
+                                  :expression {:type :application-expression,
+                                               :expressions [{:type :combinator, :name "S"}
+                                                             {:type :combinator, :name "K"}]}}],
+                   :expression {:type :application-expression,
+                                :expressions [{:type :derived-combinator, :name "x"}
+                                              {:type :derived-combinator, :name "x"}]}}}))
 
   ;; Edge cases:
   (is (= (parse "")

@@ -1,4 +1,4 @@
-# sk-interpreter
+# skoobert
 
 This is a simple interpreter for the simplest possible general-purpose programming language. It is based on the SK combinator calculus, which is a minimalist Turing-complete model of computation.
 

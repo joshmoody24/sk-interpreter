@@ -16,9 +16,12 @@ G = B B C;
 t = K;
 f = K I;
 
-zero = I;
-succ = V f;
+zero = K I;
+succ = S(S(K S)K);
 one = succ zero;
 two = succ one;
+three = succ two;
+four = succ three;
+five = succ four;
 
-I I I I I I I K I K I
+I (succ (succ (succ five)))
